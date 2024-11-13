@@ -1,7 +1,6 @@
 package com.desafiosapcommerce.plataformacursos;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,10 @@ import org.springframework.context.annotation.Bean;
 
 import com.desafiosapcommerce.plataformacursos.model.Aluno;
 import com.desafiosapcommerce.plataformacursos.model.Curso;
+import com.desafiosapcommerce.plataformacursos.model.Inscricao;
 import com.desafiosapcommerce.plataformacursos.repository.AlunoRepository;
 import com.desafiosapcommerce.plataformacursos.repository.CursoRepository;
+import com.desafiosapcommerce.plataformacursos.repository.InscricaoRepository;
 
 @SpringBootApplication
 public class PlataformacursosApplication implements CommandLineRunner {
@@ -25,10 +26,13 @@ public class PlataformacursosApplication implements CommandLineRunner {
 	@Autowired
 	private CursoRepository cursoRepository;
 
-	@Bean // garante que sempre que a aplicação for executada, a configuração será aplicada
+	@Autowired
+    private InscricaoRepository inscricaoRepository;
+
+	@Bean 
 	public ModelMapper modelMapper() {
 		ModelMapper mapper = new ModelMapper();
-		mapper.getConfiguration().setSkipNullEnabled(true); //ao usar o ModelMapper, ele não irá sobrescrever os valores nulos
+		mapper.getConfiguration().setSkipNullEnabled(true);
 		return mapper;
 	}
 
@@ -46,29 +50,26 @@ public class PlataformacursosApplication implements CommandLineRunner {
 		Aluno aluno3 = new Aluno("José", "zeh@gmail.com");
 		Aluno aluno4 = new Aluno("Ana", "ana@gmail.com");
 
-		// Adicionando os alunos a lista de alunos
-		List<Aluno> alunos = Arrays.asList(aluno1, aluno2, aluno3, aluno4);
-
 		// Instanciando os cursos
 		Curso curso1 = new Curso("Java", "Programação Java");
 		Curso curso2 = new Curso("Python", "Programação Python");
 		Curso curso3 = new Curso("JavaScript", "Programação JavaScript");
 		Curso curso4 = new Curso("SQL", "Programação SQL");
 
-		// Adicionando os cursos a lista de cursos
-		List<Curso> cursos = Arrays.asList(curso1, curso2, curso3, curso4);
+		// Salvando os cursos e os alunos
+		cursoRepository.saveAll(Arrays.asList(curso1, curso2, curso3, curso4));
+        alunoRepository.saveAll(Arrays.asList(aluno1, aluno2, aluno3, aluno4));
 
 		// Atrelando os cursos aos alunos
-		aluno1.addCurso(curso1);
-		aluno1.addCurso(curso2);
-		aluno2.addCurso(curso3);
-		aluno3.addCurso(curso1);
-		aluno4.addCurso(curso4);
+		Inscricao inscricao1 = new Inscricao(aluno1, curso1);
+        Inscricao inscricao2 = new Inscricao(aluno1, curso2);
+        Inscricao inscricao3 = new Inscricao(aluno2, curso1);
+		Inscricao inscricao4 = new Inscricao(aluno3, curso4);
+		Inscricao inscricao5 = new Inscricao(aluno4, curso3);
+		Inscricao inscricao6 = new Inscricao(aluno4, curso4);
 
-		// Salvando os cursos
-		cursoRepository.saveAll(cursos);
-		// Salvando os alunos
-		alunoRepository.saveAll(alunos);
+        inscricaoRepository.saveAll(Arrays.asList(inscricao1, inscricao2, inscricao3, inscricao4, inscricao5, inscricao6));
+
 	}
 
 }

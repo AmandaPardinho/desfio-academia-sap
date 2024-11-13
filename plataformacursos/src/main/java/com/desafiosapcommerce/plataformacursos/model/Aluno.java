@@ -8,7 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
@@ -23,8 +23,8 @@ public class Aluno {
     private String email;
     private LocalDateTime dataCadastro;
     
-    @ManyToMany(mappedBy = "alunos")
-    private List<Curso> cursos = new ArrayList<>();
+    @OneToMany(mappedBy = "aluno_id", orphanRemoval = true)
+    private List<Inscricao> inscricoes = new ArrayList<>();
 
     //Constructors
     public Aluno() {
@@ -69,6 +69,10 @@ public class Aluno {
         return dataCadastro;
     }
 
+    public List<Inscricao> getInscricoes() {
+        return inscricoes;
+    }
+
     // Methods
     @PrePersist
     public void prePersist() {
@@ -76,6 +80,8 @@ public class Aluno {
     }
 
     public void addCurso(Curso curso) {
-        this.cursos.add(curso);
+        Inscricao inscricao = new Inscricao(this, curso);
+        inscricoes.add(inscricao);
+        curso.getInscricoes().add(inscricao);
     }
 }

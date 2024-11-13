@@ -4,14 +4,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.ManyToMany;
-
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
@@ -26,13 +23,8 @@ public class Curso {
     private String descricao;
     private LocalDateTime dataCriacao;
 
-    @ManyToMany
-    @JoinTable(
-        name = "inscricao",
-        joinColumns = @JoinColumn(name = "curso_id"),
-        inverseJoinColumns = @JoinColumn(name = "aluno_id")
-    )
-    private List<Aluno> alunos = new ArrayList<>();
+    @OneToMany(mappedBy = "curso_id", orphanRemoval = true)
+    private List<Inscricao> inscricoes = new ArrayList<>();
 
     //Constructors
     public Curso() {
@@ -77,9 +69,19 @@ public class Curso {
         return dataCriacao;
     }
 
+    public List<Inscricao> getInscricoes() {
+        return inscricoes;
+    }
+
     // Methods
     @PrePersist
     public void prePersist() {
         this.dataCriacao = LocalDateTime.now();
+    }
+
+    public void addAluno(Aluno aluno) {
+        Inscricao inscricao = new Inscricao(aluno, this);
+        inscricoes.add(inscricao);
+        aluno.getInscricoes().add(inscricao);
     }
 }
