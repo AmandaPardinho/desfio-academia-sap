@@ -7,5 +7,5 @@ import com.desafiosapcommerce.plataformacursos.model.Curso;
 
 @Repository
 public interface CursoRepository extends CrudRepository<Curso, Long> {
-
+    Curso findByNome(String nome);
 }
