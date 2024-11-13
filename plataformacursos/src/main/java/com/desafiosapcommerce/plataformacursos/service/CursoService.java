@@ -1,6 +1,7 @@
 package com.desafiosapcommerce.plataformacursos.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +32,7 @@ public class CursoService {
         Curso curso = cursoRepository.findByNome(nome);
         if (curso != null) {
             return new CursoDto(curso);
-        }
-                
+        }                
         return null;        
     }
 

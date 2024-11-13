@@ -3,10 +3,12 @@ package com.desafiosapcommerce.plataformacursos;
 import java.util.Arrays;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import com.desafiosapcommerce.plataformacursos.model.Aluno;
 import com.desafiosapcommerce.plataformacursos.model.Curso;
@@ -22,6 +24,13 @@ public class PlataformacursosApplication implements CommandLineRunner {
 
 	@Autowired
 	private CursoRepository cursoRepository;
+
+	@Bean // garante que sempre que a aplicação for executada, a configuração será aplicada
+	public ModelMapper modelMapper() {
+		ModelMapper mapper = new ModelMapper();
+		mapper.getConfiguration().setSkipNullEnabled(true); //ao usar o ModelMapper, ele não irá sobrescrever os valores nulos
+		return mapper;
+	}
 
 	public static void main(String[] args) {
 

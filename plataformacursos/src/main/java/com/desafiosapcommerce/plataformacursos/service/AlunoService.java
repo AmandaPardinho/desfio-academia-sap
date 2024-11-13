@@ -22,7 +22,7 @@ public class AlunoService {
         return dto;
     }
 
-    public List<AlunoDto> getAlunos() {
+    public List<AlunoDto> getAllAlunos() {
         List<Aluno> entities = (List<Aluno>) alunoRepository.findAll();
         List<AlunoDto> dtos = entities.stream().map(AlunoDto::new).collect(Collectors.toList());
         return dtos;
@@ -33,7 +33,6 @@ public class AlunoService {
         if (aluno != null) {
             return new AlunoDto(aluno);
         }
-                
         return null;        
     }
     
