@@ -12,8 +12,8 @@ public class AlunoDto {
     private String email;
     private LocalDateTime dataCadastro;
 
-    // Atributo que armazena a lista de inscrições de um curso
-    private List<InscricaoCursoDTO> cursos;
+    // Atributo que armazena a lista de inscrições 
+    private List<InscricaoDto> inscricoes;
 
     // Construtores
     public AlunoDto() {
@@ -51,8 +51,8 @@ public class AlunoDto {
         this.dataCadastro = dataCadastro;
     }
 
-    public void setCursos(List<InscricaoCursoDTO> cursos) {
-        this.cursos = cursos;
+    public void setInscricoes(List<InscricaoDto> inscricoes) {
+        this.inscricoes = inscricoes;
     }
 
     // Getters
@@ -72,40 +72,7 @@ public class AlunoDto {
         return dataCadastro;
     }
 
-    public List<InscricaoCursoDTO> getCursos() {
-        return cursos;
-    }
-
-    // Classe interna que representa a inscrição de um curso
-    public static class InscricaoCursoDTO {
-        private Long curso_id;
-        private String curso_nome;
-        private LocalDateTime dataInscricao;
-
-        // Setters
-        public void setCursoId(Long curso_id) {
-            this.curso_id = curso_id;
-        }
-
-        public void setCursoNome(String curso_nome) {
-            this.curso_nome = curso_nome;
-        }
-
-        public void setDataInscricao(LocalDateTime dataInscricao) {
-            this.dataInscricao = dataInscricao;
-        }
-
-        // Getters
-        public Long getCursoId() {
-            return curso_id;
-        }
-
-        public String getCursoNome() {
-            return curso_nome;
-        }
-
-        public LocalDateTime getDataInscricao() {
-            return dataInscricao;
-        }
+    public List<InscricaoDto> getInscricoes() {
+        return inscricoes;
     }
 }

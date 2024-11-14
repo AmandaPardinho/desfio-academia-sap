@@ -36,7 +36,7 @@ public class AlunoController {
         return alunoService.getAllAlunos();
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.OK)
     public AlunoDto getAlunoById(@PathVariable("id") Long id) {
         try {
@@ -46,7 +46,7 @@ public class AlunoController {
         }
     }
 
-    @GetMapping(value = "/{email}")
+    @GetMapping(value = "/email/{email}")
     @ResponseStatus(HttpStatus.OK)
     public AlunoDto getAlunoByEmail(@PathVariable("email") String email) {
         try {

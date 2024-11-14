@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.desafiosapcommerce.plataformacursos.dto.CursoDto;
+import com.desafiosapcommerce.plataformacursos.dto.InscricaoDto;
 import com.desafiosapcommerce.plataformacursos.model.Curso;
 import com.desafiosapcommerce.plataformacursos.repository.CursoRepository;
 
@@ -16,22 +17,44 @@ public class CursoService {
     @Autowired
     private CursoRepository cursoRepository;
 
+    @Autowired
+    private InscricaoService inscricaoService;
+
     public CursoDto getById(Long id) {
-        Curso entity = cursoRepository.findById(id).get();
+        Curso entity = cursoRepository.findById(id).orElse(null);
+
+        if (entity == null) {
+            return null;
+        }
+
         CursoDto dto = new CursoDto(entity);
+
+        List<InscricaoDto> inscricoes = inscricaoService.getInscricoesByCursoId(id);
+        dto.setInscricoes(inscricoes);
+        
         return dto;
     }
 
     public List<CursoDto> getCursos() {
         List<Curso> entities = (List<Curso>) cursoRepository.findAll();
-        List<CursoDto> dtos = entities.stream().map(CursoDto::new).collect(Collectors.toList());
+        List<CursoDto> dtos = entities.stream()
+                .map(curso -> {
+                    CursoDto dto = new CursoDto(curso);
+                    List<InscricaoDto> inscricoes = inscricaoService.getInscricoesByCursoId(curso.getId());
+                    dto.setInscricoes(inscricoes);
+                    return dto;
+                })
+                .collect(Collectors.toList());
         return dtos;
     }
 
     public CursoDto getCursoByNome(String nome) {
         Curso curso = cursoRepository.findByNome(nome);
         if (curso != null) {
-            return new CursoDto(curso);
+            CursoDto dto = new CursoDto(curso);
+            List<InscricaoDto> inscricoes = inscricaoService.getInscricoesByCursoId(curso.getId());
+            dto.setInscricoes(inscricoes);
+            return dto;
         }                
         return null;        
     }

@@ -18,16 +18,16 @@ public class Inscricao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime dataInscricao;
+    private LocalDateTime dataInscricao;    
 
     //Foreign keys
     @ManyToOne
     @JoinColumn(name = "aluno_id", nullable = false)
-    private Aluno aluno_id;
+    private Aluno aluno;
 
     @ManyToOne
     @JoinColumn(name = "curso_id", nullable = false)
-    private Curso curso_id;
+    private Curso curso;
 
     //Constructors
     public Inscricao() {
@@ -38,8 +38,8 @@ public class Inscricao {
     }
 
     public Inscricao(Aluno aluno_id, Curso curso_id) {
-        this.aluno_id = aluno_id;
-        this.curso_id = curso_id;
+        this.aluno = aluno_id;
+        this.curso = curso_id;
         this.dataInscricao = LocalDateTime.now();
     }
 
@@ -48,12 +48,12 @@ public class Inscricao {
         this.id = id;
     }
 
-    public void setAluno_id(Aluno aluno_id) {
-        this.aluno_id = aluno_id;
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
     }
 
     public void setCurso_id(Curso curso_id) {
-        this.curso_id = curso_id;
+        this.curso = curso_id;
     }
 
     public void setDataInscricao(LocalDateTime dataInscricao) {
@@ -66,11 +66,11 @@ public class Inscricao {
     }
 
     public Aluno getAluno_id() {
-        return aluno_id;
+        return aluno;
     }
 
     public Curso getCurso_id() {
-        return curso_id;
+        return curso;
     }
 
     public LocalDateTime getDataInscricao() {
