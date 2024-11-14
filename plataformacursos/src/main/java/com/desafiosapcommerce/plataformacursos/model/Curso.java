@@ -23,7 +23,7 @@ public class Curso {
     private String descricao;
     private LocalDateTime dataCriacao;
 
-    @OneToMany(mappedBy = "curso_id", orphanRemoval = true)
+    @OneToMany(mappedBy = "curso", orphanRemoval = true)
     private List<Inscricao> inscricoes = new ArrayList<>();
 
     //Constructors

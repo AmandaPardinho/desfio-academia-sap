@@ -15,29 +15,36 @@ public class InscricaoService {
 
     private InscricaoRepository inscricaoRepository;
 
-    public List<InscricaoDto> getInscricaoByAlunoId(Long aluno_id) {
-        List<Inscricao> entities = inscricaoRepository.findByAluno_id(aluno_id);
-        return entities.stream()
-                .map(inscricao -> new InscricaoDto(
-                    inscricao.getId(),
-                    inscricao.getAluno_id(),
-                    inscricao.getCurso_id(),
-                    inscricao.getDataInscricao()
-                ))
-                .collect(Collectors.toList());
-        //return inscricoes;
+    public List<InscricaoDto> getInscricaoByAlunoId(Long alunoId) {
+        try {
+            List<Inscricao> entities = inscricaoRepository.findByAluno_id(alunoId);
+            return entities.stream()
+                    .map(inscricao -> new InscricaoDto(
+                            inscricao.getId(),
+                            inscricao.getAluno_id(),
+                            inscricao.getCurso_id(),
+                            inscricao.getDataInscricao()))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar inscrições do aluno: " + e.getMessage());
+            return null;
+        }
     }
+    
 
-    public List<InscricaoDto> getInscricoesByCursoId(Long curso_id) {
-        List<Inscricao> entities = inscricaoRepository.findByCurso_id(curso_id);
-        List<InscricaoDto> inscricoes = entities.stream()
-                .map(inscricao -> new InscricaoDto(
-                    inscricao.getId(),
-                    inscricao.getAluno_id(),
-                    inscricao.getCurso_id(),
-                    inscricao.getDataInscricao()
-                ))
-                .collect(Collectors.toList());
-        return inscricoes;
+    public List<InscricaoDto> getInscricoesByCursoId(Long cursoId) {
+        try {
+            List<Inscricao> entities = inscricaoRepository.findByCurso_id(cursoId);
+            return entities.stream()
+                    .map(inscricao -> new InscricaoDto(
+                            inscricao.getId(),
+                            inscricao.getAluno_id(),
+                            inscricao.getCurso_id(),
+                            inscricao.getDataInscricao()))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar inscrições do curso: " + e.getMessage());
+            return null;
+        }
     }
 }

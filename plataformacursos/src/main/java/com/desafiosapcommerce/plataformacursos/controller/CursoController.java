@@ -36,7 +36,7 @@ public class CursoController {
         return cursoService.getCursos();
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CursoDto getCursoById(@PathVariable("id") Long id) {
         try {
@@ -46,7 +46,7 @@ public class CursoController {
         }
     }
 
-    @GetMapping(value = "/{email}")
+    @GetMapping(value = "/name/{name}")
     @ResponseStatus(HttpStatus.OK)
     public CursoDto getCursoByEmail(@PathVariable("name") String name) {
         try {

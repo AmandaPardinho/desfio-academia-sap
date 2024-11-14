@@ -23,7 +23,7 @@ public class Aluno {
     private String email;
     private LocalDateTime dataCadastro;
     
-    @OneToMany(mappedBy = "aluno_id", orphanRemoval = true)
+    @OneToMany(mappedBy = "aluno", orphanRemoval = true)
     private List<Inscricao> inscricoes = new ArrayList<>();
 
     //Constructors

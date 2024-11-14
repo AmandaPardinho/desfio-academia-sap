@@ -21,42 +21,54 @@ public class CursoService {
     private InscricaoService inscricaoService;
 
     public CursoDto getById(Long id) {
-        Curso entity = cursoRepository.findById(id).orElse(null);
+        try {
+            Curso entity = cursoRepository.findById(id).orElse(null);
 
-        if (entity == null) {
+            if (entity == null) {
+                return null;
+            }
+
+            CursoDto dto = new CursoDto(entity);
+
+            List<InscricaoDto> inscricoes = inscricaoService.getInscricoesByCursoId(id);
+            dto.setInscricoes(inscricoes);
+            
+            return dto;
+        }catch (Exception e) {
+            System.out.println("Erro ao buscar curso por id: " + e.getMessage());
             return null;
         }
-
-        CursoDto dto = new CursoDto(entity);
-
-        List<InscricaoDto> inscricoes = inscricaoService.getInscricoesByCursoId(id);
-        dto.setInscricoes(inscricoes);
-        
-        return dto;
     }
 
     public List<CursoDto> getCursos() {
-        List<Curso> entities = (List<Curso>) cursoRepository.findAll();
-        List<CursoDto> dtos = entities.stream()
-                .map(curso -> {
-                    CursoDto dto = new CursoDto(curso);
-                    List<InscricaoDto> inscricoes = inscricaoService.getInscricoesByCursoId(curso.getId());
-                    dto.setInscricoes(inscricoes);
-                    return dto;
-                })
-                .collect(Collectors.toList());
-        return dtos;
+        try {
+            List<Curso> entities = (List<Curso>) cursoRepository.findAll();
+            List<CursoDto> dtos = entities.stream()
+                    .map(curso -> {
+                        CursoDto dto = new CursoDto(curso);
+                        List<InscricaoDto> inscricoes = inscricaoService.getInscricoesByCursoId(curso.getId());
+                        dto.setInscricoes(inscricoes);
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+            return dtos;
+        }catch (Exception e) {
+            System.out.println("Erro ao buscar cursos: " + e.getMessage());
+            return null;
+        }
     }
 
-    public CursoDto getCursoByNome(String nome) {
-        Curso curso = cursoRepository.findByNome(nome);
-        if (curso != null) {
-            CursoDto dto = new CursoDto(curso);
-            List<InscricaoDto> inscricoes = inscricaoService.getInscricoesByCursoId(curso.getId());
-            dto.setInscricoes(inscricoes);
-            return dto;
-        }                
-        return null;        
+    public CursoDto getCursoByNome(String name) {
+        try{
+            Curso curso = cursoRepository.findByNomeIgnoreCase(name);
+            if (curso != null) {
+                CursoDto dto = new CursoDto(curso);
+                return dto;
+            }              
+        }catch (Exception e) {
+            System.out.println("Erro ao buscar curso por nome: " + e.getMessage());
+        }
+        return null;
     }
 
     public CursoDto insertCursoDto(Curso curso) {

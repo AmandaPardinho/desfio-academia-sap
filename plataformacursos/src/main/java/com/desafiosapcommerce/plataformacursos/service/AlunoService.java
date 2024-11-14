@@ -21,38 +21,51 @@ public class AlunoService {
     private InscricaoService inscricaoService;
 
     public AlunoDto getById(Long id) {
-        Aluno entity = alunoRepository.findById(id).orElse(null);
+        try{
+            Aluno entity = alunoRepository.findById(id).orElse(null);
 
-        if (entity == null) {
+            if (entity == null) {
+                return null;
+            }
+
+            AlunoDto dto = new AlunoDto(entity);
+
+            List<InscricaoDto> inscricoes = inscricaoService.getInscricaoByAlunoId(id);
+            dto.setInscricoes(inscricoes);
+            return dto;
+        }catch (Exception e) {
+            System.out.println("Erro ao buscar aluno por id: " + e.getMessage());
             return null;
         }
-
-        AlunoDto dto = new AlunoDto(entity);
-
-        List<InscricaoDto> inscricoes = inscricaoService.getInscricaoByAlunoId(id);
-        dto.setInscricoes(inscricoes);
-        return dto;
     }
 
     public List<AlunoDto> getAllAlunos() {
-        List<Aluno> entities = (List<Aluno>) alunoRepository.findAll();
-        List<AlunoDto> dtos = entities.stream()
-                .map(aluno -> {
-                    AlunoDto dto = new AlunoDto(aluno);
-                    List<InscricaoDto> inscricoes = inscricaoService.getInscricaoByAlunoId(aluno.getId());
-                    dto.setInscricoes(inscricoes);
-                    return dto;
-                })
-                .collect(Collectors.toList());
-        return dtos;
+        try{
+            List<Aluno> entities = (List<Aluno>) alunoRepository.findAll();
+            List<AlunoDto> dtos = entities.stream()
+                    .map(aluno -> {
+                        AlunoDto dto = new AlunoDto(aluno);
+                        List<InscricaoDto> inscricoes = inscricaoService.getInscricaoByAlunoId(aluno.getId());
+                        dto.setInscricoes(inscricoes);
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+            return dtos;
+        }catch (Exception e) {
+            System.out.println("Erro ao buscar alunos: " + e.getMessage());
+            return null;
+        }
     }
 
     public AlunoDto getAlunoByEmail(String email) {
-        Aluno aluno = alunoRepository.findByEmail(email);
-        if (aluno != null) {
-            AlunoDto dto = new AlunoDto(aluno);
-            List<InscricaoDto> inscricoes = inscricaoService.getInscricaoByAlunoId(aluno.getId());
-            dto.setInscricoes(inscricoes);
+        try{
+            Aluno aluno = alunoRepository.findByEmail(email);
+            if (aluno != null) {
+                AlunoDto dto = new AlunoDto(aluno);
+                return dto;
+            }            
+        }catch (Exception e) {
+            System.out.println("Erro ao buscar aluno por email: " + e.getMessage());
         }
         return null;        
     }
